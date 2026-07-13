@@ -4,6 +4,7 @@ public class Cell {
     private final boolean mine;
     public boolean revealed = false;
     private int adjacent;
+    public boolean flag = false;
 
     public Cell(boolean mine) {
         this.mine = mine;
@@ -19,6 +20,14 @@ public class Cell {
 
     public void setAdjacent(int n) {
         this.adjacent = n;
+    }
+
+    public void setFlag() {
+        if(this.flag == false){
+            this.flag = true;
+        } else {
+            this.flag = false;
+        }
     }
 
     public void reveal() {

@@ -1,5 +1,9 @@
 
 import java.util.Scanner;
+import java.io.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class Game {
 
@@ -11,32 +15,113 @@ public class Game {
         this.gameBoard = gameBoard;
         this.finished = false;
         this.won = true;
-        play();
+        play(gameBoard.board.length, gameBoard.board[0].length);
     }
 
-    private void play() {
-        Scanner in = new Scanner(System.in);
-        System.out.print("Mine total: ");
-        System.out.println(gameBoard.mines);
-        while (!finished) {
-            minimap(gameBoard.board.length, gameBoard.board[0].length);
-            System.out.println();
-            System.out.print("Row: ");
-            int row = in.nextInt();
-            while (row > gameBoard.board.length || row <= 0) {
-                System.out.print("Please input again. Row: ");
-                row = in.nextInt();
+    private void play(int row, int column) {
+        JFrame frame = new JFrame("Minesweeper");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setLayout(new GridLayout(row, column));
+
+        JButton[][] tiles = new JButton[row][column];
+
+        frame.setSize(800, 800);
+        frame.setLocationRelativeTo(null);
+
+        for(int i = 0 ; i < row ; i++){
+            for(int j = 0 ; j < column ; j++){
+                tiles[i][j] = new JButton();
+
+                final int currentRow = i;
+                final int currentColumn = j;
+
+                tiles[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e){
+                        if(finished == false){
+                            if(won == true){
+                                if (SwingUtilities.isLeftMouseButton(e)) {
+                                    if(gameBoard.board[currentRow][currentColumn].flag == false){
+                                        reveal(currentRow, currentColumn);
+                                        if(gameBoard.board[currentRow][currentColumn].getAdjacent() == 0){
+                                            for(int ii = 0 ; ii < row ; ii++){
+                                                for(int jj = 0 ; jj < column ; jj++){
+                                                    if(gameBoard.board[ii][jj].revealed == true){
+                                                        tiles[ii][jj].setText(String.valueOf(gameBoard.board[ii][jj].getAdjacent()));
+                                                        tiles[ii][jj].setForeground(Color.BLACK);
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if(won == false){
+                                            System.out.println("Game over!");
+                                            for(int ii = 0 ; ii < row ; ii++){
+                                                for(int jj = 0 ; jj < column ; jj++){
+                                                    if(gameBoard.board[ii][jj].getMine()){
+                                                        if(gameBoard.board[ii][jj].flag == false){
+                                                            tiles[ii][jj].setText("x");
+                                                            tiles[ii][jj].setForeground(Color.RED);
+                                                        }
+                                                    }
+                                                    if(!gameBoard.board[ii][jj].getMine() && gameBoard.board[ii][jj].flag == true){
+                                                        tiles[ii][jj].setText("Z");
+                                                        tiles[ii][jj].setForeground(Color.PINK);
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            tiles[currentRow][currentColumn].setText(String.valueOf(gameBoard.board[currentRow][currentColumn].getAdjacent()));
+                                            tiles[currentRow][currentColumn].setForeground(Color.BLACK);
+                                        }
+                                        checkFinished(row, column);
+                                    } else {
+                                        System.out.println("This cell is flagged!");
+                                    }
+                                } else if (SwingUtilities.isRightMouseButton(e)) {
+                                    if(gameBoard.board[currentRow][currentColumn].revealed == false){
+                                        gameBoard.board[currentRow][currentColumn].setFlag();
+                                        if(gameBoard.board[currentRow][currentColumn].flag == false){
+                                            tiles[currentRow][currentColumn].setText("");
+                                        } else {
+                                            tiles[currentRow][currentColumn].setText("F");
+                                            tiles[currentRow][currentColumn].setForeground(Color.GREEN);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                frame.add(tiles[i][j]);
             }
-            System.out.print("Column: ");
-            int column = in.nextInt();
-            while (column > gameBoard.board[0].length || column <= 0) {
-                System.out.print("Please input again. Column: ");
-                column = in.nextInt() - 1;
-            }
-            reveal(row - 1, column - 1);
-            checkFinished(gameBoard.board.length, gameBoard.board[0].length);
         }
-        in.close();
+
+        frame.setVisible(true);
+
+        // Scanner in = new Scanner(System.in);
+        // System.out.print("Mine total: ");
+        // System.out.println(gameBoard.mines);
+        // while (!finished) {
+        //     minimap(gameBoard.board.length, gameBoard.board[0].length);
+        //     System.out.println();
+        //     System.out.print("Row: ");
+        //     int row = in.nextInt();
+        //     while (row > gameBoard.board.length || row <= 0) {
+        //         System.out.print("Please input again. Row: ");
+        //         row = in.nextInt();
+        //     }
+        //     System.out.print("Column: ");
+        //     int column = in.nextInt();
+        //     while (column > gameBoard.board[0].length || column <= 0) {
+        //         System.out.print("Please input again. Column: ");
+        //         column = in.nextInt() - 1;
+        //     }
+        //     reveal(row - 1, column - 1);
+        //     checkFinished(gameBoard.board.length, gameBoard.board[0].length);
+        // }
+        // in.close();
     }
 
     public void reveal(int row, int column) {
@@ -58,55 +143,54 @@ public class Game {
     public void checkFinished(int row, int column) {
         if(won == false){
             System.out.println("\nYou lose!");
-            revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
+            // revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
             finished = true;
-        } else {
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < column; j++) {
-                    finished = true;
-                    if (gameBoard.board[i][j].revealed == false && gameBoard.board[i][j].getMine() == false) {
-                        finished = false;
-                    }
-                }
-            }
-            if(finished == true){
-                System.out.println("\nYou won!");
-                revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
-            }
+            return;
         }
-    }
-
-    public void minimap(int row, int column) {
+        finished = true;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
-                if (gameBoard.board[i][j].revealed == false) {
-                    System.out.print("-");
-                } else if (!gameBoard.board[i][j].getMine()) {
-                    System.out.print(gameBoard.board[i][j].getAdjacent());
+                if (gameBoard.board[i][j].revealed == false && gameBoard.board[i][j].getMine() == false) {
+                    finished = false;
+                    return;
                 }
-                System.out.print(" ");
             }
-            System.out.println();
         }
+        System.out.println("\nYou won!");
+        // revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
     }
 
-    public void revealFullmap(int row, int column) {
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                if (gameBoard.board[i][j].revealed == false && !gameBoard.board[i][j].getMine()) {
-                    System.out.print("  ");
-                    continue;
-                }
-                if (gameBoard.board[i][j].getMine()) {
-                    System.out.print("x");
-                } else {
-                    System.out.print(gameBoard.board[i][j].getAdjacent());
-                }
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
-    }
+    // public void minimap(int row, int column) {
+    //     for (int i = 0; i < row; i++) {
+    //         for (int j = 0; j < column; j++) {
+    //             if (gameBoard.board[i][j].revealed == false) {
+    //                 System.out.print("-");
+    //             } else if (!gameBoard.board[i][j].getMine()) {
+    //                 System.out.print(gameBoard.board[i][j].getAdjacent());
+    //             }
+    //             System.out.print(" ");
+    //         }
+    //         System.out.println();
+    //     }
+    // }
+
+    // public void revealFullmap(int row, int column) {
+    //     for (int i = 0; i < row; i++) {
+    //         for (int j = 0; j < column; j++) {
+    //             if (gameBoard.board[i][j].revealed == false && !gameBoard.board[i][j].getMine()) {
+    //                 System.out.print("  ");
+    //                 continue;
+    //             }
+    //             if (gameBoard.board[i][j].getMine()) {
+    //                 System.out.print("x");
+    //             } else {
+    //                 System.out.print(gameBoard.board[i][j].getAdjacent());
+    //             }
+    //             System.out.print(" ");
+    //         }
+    //         System.out.println();
+    //     }
+    // }
 
     public void revealCells(int row, int column) {
         if (row < 0 || column < 0 || row >= gameBoard.board.length || column >= gameBoard.board[0].length) {
