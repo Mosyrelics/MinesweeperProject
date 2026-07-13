@@ -1,4 +1,3 @@
-package Minesweeper.src;
 
 public class Cell {
 

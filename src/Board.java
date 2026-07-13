@@ -1,17 +1,16 @@
-package Minesweeper.src;
 
 import java.util.Random;
 
 public class Board {
 
-    private final Cell[][] board;
-    private final int mines;
+    public final Cell[][] board;
+    public final int mines;
 
     public Board(int row, int column) {
         Random random = new Random();
 
         board = new Cell[row][column];
-        mines = (row * column) / 10;
+        mines = (row * column) / 6;
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
@@ -38,29 +37,22 @@ public class Board {
 
     private int calculateAdjacent(int row, int column) {
         int n = 0;
-        if (board[row - 1][column].getMine()) {
-            n += 1;
-        }
-        if (board[row + 1][column].getMine()) {
-            n += 1;
-        }
-        if (board[row][column - 1].getMine()) {
-            n += 1;
-        }
-        if (board[row][column + 1].getMine()) {
-            n += 1;
-        }
-        if (board[row - 1][column - 1].getMine()) {
-            n += 1;
-        }
-        if (board[row - 1][column + 1].getMine()) {
-            n += 1;
-        }
-        if (board[row + 1][column - 1].getMine()) {
-            n += 1;
-        }
-        if (board[row + 1][column + 1].getMine()) {
-            n += 1;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                int temprow = row + i;
+                int tempcol = column + j;
+
+                if (temprow >= 0 && temprow < board.length) {
+                    if (tempcol >= 0 && tempcol < board[0].length) {
+                        if (board[temprow][tempcol].getMine()) {
+                            n++;
+                        }
+                    }
+                }
+            }
         }
         return n;
     }
