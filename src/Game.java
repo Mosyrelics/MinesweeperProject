@@ -5,10 +5,12 @@ public class Game {
 
     private final Board gameBoard;
     private boolean finished;
+    private boolean won;
 
     public Game(Board gameBoard) {
         this.gameBoard = gameBoard;
         this.finished = false;
+        this.won = true;
         play();
     }
 
@@ -32,7 +34,7 @@ public class Game {
                 column = in.nextInt() - 1;
             }
             reveal(row - 1, column - 1);
-            finished = checkFinished(gameBoard.board.length, gameBoard.board[0].length);
+            checkFinished(gameBoard.board.length, gameBoard.board[0].length);
         }
         in.close();
     }
@@ -40,9 +42,7 @@ public class Game {
     public void reveal(int row, int column) {
         if (gameBoard.board[row][column].revealed == false) {
             if (gameBoard.board[row][column].getMine()) {
-                System.out.println("Game Over!");
-                finished = true;
-                revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
+                won = false;
             } else {
                 if (gameBoard.board[row][column].getAdjacent() == 0) {
                     revealCells(row, column);
@@ -55,17 +55,25 @@ public class Game {
         }
     }
 
-    public boolean checkFinished(int row, int column) {
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                if (gameBoard.board[i][j].revealed == false && gameBoard.board[i][j].getMine() == false) {
-                    return false;
+    public void checkFinished(int row, int column) {
+        if(won == false){
+            System.out.println("\nYou lose!");
+            revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
+            finished = true;
+        } else {
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < column; j++) {
+                    finished = true;
+                    if (gameBoard.board[i][j].revealed == false && gameBoard.board[i][j].getMine() == false) {
+                        finished = false;
+                    }
                 }
             }
+            if(finished == true){
+                System.out.println("\nYou won!");
+                revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
+            }
         }
-        System.out.println("\nYou won!");
-        revealFullmap(gameBoard.board.length, gameBoard.board[0].length);
-        return true;
     }
 
     public void minimap(int row, int column) {
