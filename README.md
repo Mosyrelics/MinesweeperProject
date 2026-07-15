@@ -14,8 +14,8 @@ A classic single-player puzzle game where the objectiveis to clear a grid of hid
 This project requires latest version of Java to run.
 To install Java, please refer to this page:
 
-- Install Java <a href="https://www.java.com/en/download/manual.jsp" target="_blank">
-- Install JDK <a href="https://www.oracle.com/asean/java/technologies/downloads/" target="_blank">
+- <a href="https://www.java.com/en/download/manual.jsp" target="_blank">Install Java</a>
+- <a href="https://www.oracle.com/asean/java/technologies/downloads/" target="_blank">Install JDK</a>
 
 ## How to run
 
