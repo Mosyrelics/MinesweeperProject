@@ -23,7 +23,7 @@ public class Cell {
     }
 
     public void setFlag() {
-        if(this.flag == false){
+        if (this.flag == false) {
             this.flag = true;
         } else {
             this.flag = false;

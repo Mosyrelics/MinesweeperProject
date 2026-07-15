@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -47,7 +48,7 @@ public class Game {
 
     public void play(int row, int column) {
         frame = new JFrame("Minesweeper");
-        frame.setResizable(false); 
+        frame.setResizable(false);
         frame.setLayout(new BorderLayout());
         mineFrame = new JPanel();
         tiles = new JButton[row][column];
@@ -55,33 +56,33 @@ public class Game {
 
         tileSize = Math.min(40, 2500 / Math.max(row, column));
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mineFrame.setPreferredSize(new Dimension(tileSize*column, tileSize*row));
+        mineFrame.setPreferredSize(new Dimension(tileSize * column, tileSize * row));
 
         mineFrame.setLayout(new GridLayout(row, column));
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                if(restarting == false){
+                if (restarting == false) {
                     menuFrame.setVisible(true);
                 }
             }
         });
 
-        for(int i = 0 ; i < row ; i++){
-            for(int j = 0 ; j < column ; j++){
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
                 tiles[i][j] = makeTiles(i, j);
                 mineFrame.add(tiles[i][j]);
             }
         }
 
-        information.setPreferredSize(new Dimension(tileSize*column, 2*tileSize));
+        information.setPreferredSize(new Dimension(tileSize * column, 2 * tileSize));
 
         flags = new JLabel("Flags: " + flagCount + "  ");
         restart = new JButton("Restart");
         restart.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e){
-                if(SwingUtilities.isLeftMouseButton(e)){
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     restarting = true;
                     frame.dispose();
 
@@ -95,7 +96,7 @@ public class Game {
 
         timer = new JLabel("  Time: 0");
 
-        gameTimer = new Timer(10, e->{
+        gameTimer = new Timer(10, e -> {
             elapsed += 0.01;
             timer.setText(String.format("  Time: %.2f", elapsed));
         });
@@ -126,7 +127,7 @@ public class Game {
     }
 
     public void checkFinished(int row, int column) {
-        if(won == false){
+        if (won == false) {
             finished = true;
             return;
         }
@@ -144,7 +145,6 @@ public class Game {
         showResult(elapsed);
     }
 
-
     public void revealCells(int row, int column) {
         if (row < 0 || column < 0 || row >= gameBoard.board.length || column >= gameBoard.board[0].length) {
             return;
@@ -159,8 +159,8 @@ public class Game {
         }
 
         gameBoard.board[row][column].reveal();
-        
-        if(gameBoard.board[row][column].getAdjacent() != 0){
+
+        if (gameBoard.board[row][column].getAdjacent() != 0) {
             tiles[row][column].setText(String.valueOf(gameBoard.board[row][column].getAdjacent()));
             tiles[row][column].setForeground(Color.BLACK);
             tiles[row][column].setBackground(Color.WHITE);
@@ -181,19 +181,19 @@ public class Game {
         }
     }
 
-    private JButton makeTiles(int row, int column){
+    private JButton makeTiles(int row, int column) {
         JButton button = new JButton();
         button.setMargin(new Insets(0, 0, 0, 0));
         button.setBackground(Color.WHITE);
         button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, Math.max(8, tileSize / 2)));
         button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e){
-                if(SwingUtilities.isLeftMouseButton(e)){
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     leftClick(row, column);
                 }
 
-                if(SwingUtilities.isRightMouseButton(e)){
+                if (SwingUtilities.isRightMouseButton(e)) {
                     rightClick(row, column);
                 }
             }
@@ -201,12 +201,12 @@ public class Game {
         return button;
     }
 
-    private void leftClick(int row, int column){
-        if(finished == true){
+    private void leftClick(int row, int column) {
+        if (finished == true) {
             return;
         }
 
-        if(gameBoard.board[row][column].flag == true){
+        if (gameBoard.board[row][column].flag == true) {
             return;
         }
 
@@ -215,7 +215,7 @@ public class Game {
             gameTimer.start();
         }
 
-        if(gameBoard.board[row][column].flag == false){
+        if (gameBoard.board[row][column].flag == false) {
             reveal(row, column);
             refreshBoard(gameBoard.board.length, gameBoard.board[0].length);
             checkFinished(gameBoard.board.length, gameBoard.board[0].length);
@@ -223,13 +223,13 @@ public class Game {
         }
     }
 
-    private void rightClick(int row, int column){
-        if(finished == true){
+    private void rightClick(int row, int column) {
+        if (finished == true) {
             return;
         }
-        if(gameBoard.board[row][column].revealed == false){
+        if (gameBoard.board[row][column].revealed == false) {
             gameBoard.board[row][column].setFlag();
-            if(gameBoard.board[row][column].flag == false){
+            if (gameBoard.board[row][column].flag == false) {
                 flagCount++;
                 tiles[row][column].setBackground(Color.WHITE);
                 flags.setText("Flags: " + flagCount + "  ");
@@ -241,16 +241,16 @@ public class Game {
         }
     }
 
-    private void ifLost(int row, int column){
-        if(won == false){
-            for(int i = 0 ; i < row ; i++){
-                for(int j = 0 ; j < column ; j++){
-                    if(gameBoard.board[i][j].getMine()){
-                        if(gameBoard.board[i][j].flag == false){
+    private void ifLost(int row, int column) {
+        if (won == false) {
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < column; j++) {
+                    if (gameBoard.board[i][j].getMine()) {
+                        if (gameBoard.board[i][j].flag == false) {
                             tiles[i][j].setBackground(Color.RED);
                         }
                     }
-                    if(!gameBoard.board[i][j].getMine() && gameBoard.board[i][j].flag == true){
+                    if (!gameBoard.board[i][j].getMine() && gameBoard.board[i][j].flag == true) {
                         tiles[i][j].setBackground(Color.PINK);
                     }
                     gameTimer.stop();
@@ -259,10 +259,10 @@ public class Game {
         }
     }
 
-    private void refreshBoard(int row, int column){
-        for(int i = 0 ; i < row ; i++){
-            for(int j = 0 ; j < column ; j++){
-            if(gameBoard.board[i][j].revealed == true){
+    private void refreshBoard(int row, int column) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (gameBoard.board[i][j].revealed == true) {
                     tiles[i][j].setText(String.valueOf(gameBoard.board[i][j].getAdjacent()));
                     tiles[i][j].setForeground(Color.BLACK);
                     tiles[i][j].setBackground(Color.WHITE);
@@ -271,7 +271,7 @@ public class Game {
         }
     }
 
-    private void showResult(double timer){
+    private void showResult(double timer) {
         result = new JDialog(frame, "You won!", true);
         result.setLayout(new BorderLayout());
         time = new JPanel();
@@ -284,16 +284,16 @@ public class Game {
         name.add(nameText);
         name.add(player);
         noSave = new JButton("Don't Save");
-        noSave.addActionListener(new ActionListener(){
+        noSave.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 result.dispose();
             }
         });
         save = new JButton("Save");
-        save.addActionListener(new ActionListener(){
+        save.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter("history.txt", true))) {
                     writer.write(player.getText() + ": " + gameBoard.board.length + "x" + gameBoard.board[0].length + " - " + String.format("%.2f", elapsed));
                     writer.newLine();
@@ -309,7 +309,7 @@ public class Game {
         result.add(name, BorderLayout.CENTER);
         result.add(resultAction, BorderLayout.SOUTH);
         result.setResizable(false);
-        result.setSize(300,150);
+        result.setSize(300, 150);
         result.setLocationRelativeTo(frame);
         result.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         result.setVisible(true);

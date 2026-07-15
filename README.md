@@ -1,18 +1,45 @@
-## Getting Started
+# Minesweeper Game
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+A classic single-player puzzle game where the objectiveis to clear a grid of hidden mines without detonating any of them.
 
-## Folder Structure
+## Features
 
-The workspace contains two folders by default, where:
+- Custom board size: Players are able to customize the board size up to 100 rows and 150 columns.
+- Flagging: Players are able to flag the grid to pin where the mines are.
+- Timer: When the game started, the stopwatch will start to count how long it took player to finish the game.
+- Saving: Players able to save their scores locally, and their score will be saved in the same directory of the Java File with the name `history.text`.##
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Installation
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+This project requires latest version of Java to run.
+To install Java, please refer to this page:
+Install Java: <a href="https://www.java.com/en/download/manual.jsp" target="_blank">
+Install JDK: <a href="https://www.oracle.com/asean/java/technologies/downloads/" target="_blank">
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## How to run
 
-## Dependency Management
+1. Open terminal and locate the directory to the `src` folder of this file.
+2. Type this command in terminal: `javac *.java` to compile the program.
+3. Type `java Main` to run the program.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Find a bug?
+
+If you found an issue or would like to submit an improvement to this project, please submit an issue using the issues tab above.
+
+## Known issues
+
+Currently no issues have been known.
+
+## Program appearance
+
+Main Menu
+<img src="gitimage/MainMenu.png" width="500">
+
+Game
+<img src="gitimage/Game.png" width="500">
+
+Saving score
+<img src="gitimage/SaveScore.png" width="500">
+
+Win History
+<img src="gitimage/History.png" width="500">
