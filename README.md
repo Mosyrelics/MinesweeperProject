@@ -31,6 +31,13 @@ If you found an issue or would like to submit an improvement to this project, pl
 
 Currently no issues have been known.
 
+## Package Used
+
+- Java Swing
+- Java Random
+- Java I/O
+- Java Abstract Window Toolkit
+
 ## Program appearance
 
 ### Main Menu
