@@ -7,14 +7,15 @@ A classic single-player puzzle game where the objectiveis to clear a grid of hid
 - Custom board size: Players are able to customize the board size up to 100 rows and 150 columns.
 - Flagging: Players are able to flag the grid to pin where the mines are.
 - Timer: When the game started, the stopwatch will start to count how long it took player to finish the game.
-- Saving: Players able to save their scores locally, and their score will be saved in the same directory of the Java File with the name `history.text`.##
+- Saving: Players able to save their scores locally, and their score will be saved in the same directory of the Java File with the name `history.text`.
 
 ## Installation
 
 This project requires latest version of Java to run.
 To install Java, please refer to this page:
-Install Java: <a href="https://www.java.com/en/download/manual.jsp" target="_blank">
-Install JDK: <a href="https://www.oracle.com/asean/java/technologies/downloads/" target="_blank">
+
+- Install Java <a href="https://www.java.com/en/download/manual.jsp" target="_blank">
+- Install JDK <a href="https://www.oracle.com/asean/java/technologies/downloads/" target="_blank">
 
 ## How to run
 
@@ -32,14 +33,18 @@ Currently no issues have been known.
 
 ## Program appearance
 
-Main Menu
+### Main Menu
+
 <img src="gitimage/MainMenu.png" width="500">
 
-Game
+### Game
+
 <img src="gitimage/Game.png" width="500">
 
-Saving score
+### Saving score
+
 <img src="gitimage/SaveScore.png" width="500">
 
-Win History
+### Win History
+
 <img src="gitimage/History.png" width="500">
