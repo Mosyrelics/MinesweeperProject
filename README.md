@@ -23,7 +23,7 @@ To install Java, please refer to this page:
 2. Type this command in terminal: `javac *.java` to compile the program.
 3. Type `java Main` to run the program.
 
-## Find a bug?
+## Found a bug?
 
 If you found an issue or would like to submit an improvement to this project, please submit an issue using the issues tab above.
 
