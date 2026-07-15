@@ -1,7 +1,9 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Game {
 
@@ -18,12 +20,19 @@ public class Game {
     private JButton restart;
     private JLabel timer;
     private JDialog result;
-    private JLabel resultText;
     private boolean restarting;
     private int tileSize;
     private Timer gameTimer;
     private double elapsed;
     private boolean timerStarted;
+    private JPanel time;
+    private JLabel timeTaken;
+    private JPanel name;
+    private JLabel nameText;
+    private JTextField player;
+    private JPanel resultAction;
+    private JButton save;
+    private JButton noSave;
 
     public Game(Board gameBoard, JFrame menuFrame) {
         this.gameBoard = gameBoard;
@@ -117,10 +126,6 @@ public class Game {
     }
 
     public void checkFinished(int row, int column) {
-        result = new JDialog(frame, "You won!", true);
-        result.setLayout(new BorderLayout());
-        resultText = new JLabel("You won!");
-        
         if(won == false){
             finished = true;
             return;
@@ -135,13 +140,8 @@ public class Game {
             }
         }
 
-        result.add(resultText, BorderLayout.CENTER);
-        result.setResizable(false);
-        result.setSize(300,150);
-        result.setLocationRelativeTo(frame);
-        result.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         gameTimer.stop();
-        result.setVisible(true);
+        showResult(elapsed);
     }
 
 
@@ -271,4 +271,47 @@ public class Game {
         }
     }
 
+    private void showResult(double timer){
+        result = new JDialog(frame, "You won!", true);
+        result.setLayout(new BorderLayout());
+        time = new JPanel();
+        name = new JPanel();
+        resultAction = new JPanel();
+        timeTaken = new JLabel(String.format("  Time taken: %.2f", elapsed));
+        time.add(timeTaken);
+        nameText = new JLabel("Name: ");
+        player = new JTextField(15);
+        name.add(nameText);
+        name.add(player);
+        noSave = new JButton("Don't Save");
+        noSave.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                result.dispose();
+            }
+        });
+        save = new JButton("Save");
+        save.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("history.txt", true))) {
+                    writer.write(player.getText() + ": " + gameBoard.board.length + "x" + gameBoard.board[0].length + " - " + String.format("%.2f", elapsed));
+                    writer.newLine();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                result.dispose();
+            }
+        });
+        resultAction.add(noSave);
+        resultAction.add(save);
+        result.add(time, BorderLayout.NORTH);
+        result.add(name, BorderLayout.CENTER);
+        result.add(resultAction, BorderLayout.SOUTH);
+        result.setResizable(false);
+        result.setSize(300,150);
+        result.setLocationRelativeTo(frame);
+        result.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        result.setVisible(true);
+    }
 }
